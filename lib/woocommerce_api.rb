@@ -139,20 +139,18 @@ module WooCommerce
       options[:headers]["Content-Type"] = "application/json;charset=utf-8" if !data.empty?
 
       # Set basic authentication.
-      if @is_ssl
-        options[:verify] = @verify_ssl
-
-        if @query_string_auth
-          options.merge!(query: {
-            consumer_key: @consumer_key,
-            consumer_secret: @consumer_secret
-          })
-        else
-          options.merge!(basic_auth: {
-            username: @consumer_key,
-            password: @consumer_secret
-          })
-        end
+      options[:verify] = @verify_ssl if @is_ssl
+      
+      if @query_string_auth
+        options.merge!(query: {
+          consumer_key: @consumer_key,
+          consumer_secret: @consumer_secret
+        })
+      else
+        options.merge!(basic_auth: {
+          username: @consumer_key,
+          password: @consumer_secret
+        })
       end
 
       options.merge!(debug_output: $stdout) if @debug_mode
